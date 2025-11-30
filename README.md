@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/jeanfortheweb/typeorm-fixture-builder.svg?branch=master)](https://travis-ci.org/jeanfortheweb/typeorm-fixture-builder) [![Maintainability](https://api.codeclimate.com/v1/badges/e37027e3a284fbf4f7d1/maintainability)](https://codeclimate.com/github/jeanfortheweb/typeorm-fixture-builder/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/e37027e3a284fbf4f7d1/test_coverage)](https://codeclimate.com/github/jeanfortheweb/typeorm-fixture-builder/test_coverage)
+# @backitinc/typeorm-fixture-builder <!-- omit in toc -->
 
-# typeorm-fixture-builder <!-- omit in toc -->
-
-**typeorm-fixture-builder** was created when I struggled with the current fixture solutions for typeorm avaible. They simply didn't fit my needs and/or weren't flexible enough. So I decided to create another one.
+**typeorm-fixture-builder** is a painless and type-safe solution for creating data fixtures with TypeORM.
 
 # Documentation <!-- omit in toc -->
 
@@ -17,14 +15,14 @@
 
 # Installation
 
-Install `typeorm-fixture-builder` and it's peer dependencies. Usually you will install `typescript` as dev dependency:
+Install `@backitinc/typeorm-fixture-builder` and its peer dependencies:
 
 ```sh
-yarn add typeorm typeorm-fixture-builder
-yarn add -D typescript
+npm install @backitinc/typeorm-fixture-builder typeorm
+npm install -D typescript
 ```
 
-This will give you access to the `fixtures` cli utitlity as also to the programmatic api.
+This will give you access to the `fixtures` CLI utility as well as the programmatic API.
 
 # Usage
 
@@ -34,7 +32,7 @@ Therefore, we are able to create typesafe fixture definitions.
 By default, the CLI will look for a `fixtures` folder, scanning for all files with a `.bundle.ts` suffix:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { User } from '../entities/user.entity';
 
 export const user1 = fixture(User, {
@@ -51,21 +49,12 @@ export const user2 = fixture(User, {
 Now you can run these fixtures using the CLI:
 
 ```sh
-# yarn
-yarn fixtures install
-
-# npm/npx
 npx fixtures install
 ```
 
 For more CLI options checkout
 
 ```sh
-# yarn
-yarn fixtures --help
-yarn fixtures install --help
-
-# npm/npx
 npx fixtures --help
 npx fixtures install --help
 ```
@@ -84,7 +73,7 @@ The following rules apply to exports from bundle files:
 1. The export is a fixture itself:
 
    ```ts
-   import { fixture } from 'typeorm-fixture-builder';
+   import { fixture } from '@backitinc/typeorm-fixture-builder';
    import { User } from '../entities/User.entity';
 
    export const user = fixture(User, { firstName: 'Foo' });
@@ -93,7 +82,7 @@ The following rules apply to exports from bundle files:
 2. The export is an array of fixtures:
 
    ```ts
-   import { fixture } from 'typeorm-fixture-builder';
+   import { fixture } from '@backitinc/typeorm-fixture-builder';
    import { User } from '../entities/User.entity';
 
    export const users = [
@@ -106,7 +95,7 @@ The following rules apply to exports from bundle files:
 3. The export is an Object where the property values are fixtures:
 
    ```ts
-   import { fixture } from 'typeorm-fixture-builder';
+   import { fixture } from '@backitinc/typeorm-fixture-builder';
    import { User } from '../entities/User.entity';
 
    export const users = {
@@ -119,7 +108,7 @@ The following rules apply to exports from bundle files:
 These rules can be combined to allow deeper nested structures:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { User } from '../entities/User.entity';
 import { Picture } from '../entities/picture.entity';
 
@@ -148,7 +137,7 @@ it from the bundle, it's still a good practice to export all fixtures
 you define:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { Group } from '../entities/group.entity';
 
 export const groups = {
@@ -175,7 +164,7 @@ It's absolutely safe to use fixtures from foreign bundle files:
 
 ```ts
 // fixtures/groups.bundle.ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { Group } from '../entities/group.entity';
 
 export const administrators: fixture(Group, { name: 'Administrators' });
@@ -184,7 +173,7 @@ export const customers: fixture(Group, { name: 'Customers' });
 
 ```ts
 // fixtures/users.bundle.ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { User } from '../entities/user.entity';
 import { administrators, customers } from './groups.bundle';
 
@@ -203,7 +192,7 @@ You could even define your fixtures, or functions that will create fixtures
 in non bundle files. It's only important that all your intended fixtures are exported from a bundle file in the end:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import faker from 'faker';
 import { groups } from './groups.bundle';
 
@@ -221,7 +210,7 @@ export function createRandomUsers(count: number): User[] {
 ```
 
 ```ts
-import { builder } from 'typeorm-fixture-builder';
+import { builder } from '@backitinc/typeorm-fixture-builder';
 import { User } from '../entities/user.entity';
 import { createRandomUsers } from './helpers.ts';
 
@@ -243,7 +232,7 @@ The CLI will use this query builder to find a single entity by it's criteria. If
 otherwise a new entity will be persisted:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { User } from '../entities/user.entity';
 
 export const user = fixture(
@@ -259,7 +248,7 @@ export const user = fixture(
 However, if you want to do this often on a certain type of entity, or even with a fixed set of conditions, it's useful to create a decorated fixture function which will setup the `resolver function` for you:
 
 ```ts
-import { fixture } from 'typeorm-fixture-builder';
+import { fixture } from '@backitinc/typeorm-fixture-builder';
 import { DeepPartial } from 'typeorm';
 import { User } from '../entities/user.entity';
 
@@ -284,7 +273,7 @@ Such functions could also be placed in some kind of non bundle helper files, of 
 If you just want to install some fixtures programmatically, you can import and use the `install` function. It takes a TypeORM DataSource and an array of fixtures:
 
 ```ts
-import { fixture, install } from 'typeorm-fixture-builder';
+import { fixture, install } from '@backitinc/typeorm-fixture-builder';
 import { DataSource } from 'typeorm';
 import { User } from '../entities/user.entity';
 
@@ -311,7 +300,7 @@ installFixtures();
 You can also import and collect fixtures from bundle files. Import and use the `collect` function. Pass the imported bundle module and it will return an array of collected fixtures:
 
 ```ts
-import { collect, install } from 'typeorm-fixture-builder';
+import { collect, install } from '@backitinc/typeorm-fixture-builder';
 import { DataSource } from 'typeorm';
 import UserBundle from '../fixtures/user.bundle';
 
@@ -334,7 +323,7 @@ testing scenarios which wants to redeploy fixtures frequently in one process.
 To overcome this, you can use the `clear` function before calling `install` again, which will clear the internal caching, allowing fixtures to be persisted again:
 
 ```ts
-import { collect, install, clear } from 'typeorm-fixture-builder';
+import { collect, install, clear } from '@backitinc/typeorm-fixture-builder';
 import { DataSource } from 'typeorm';
 import UserBundle from '../fixtures/user.bundle';
 

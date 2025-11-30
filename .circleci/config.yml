@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.1.0
+jobs:
+  release:
+    executor:
+      name: node/default
+      tag: '18.18.2'
+    environment:
+      GIT_COMMITTER_NAME: "github-actions[bot]"
+      GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
+      GIT_AUTHOR_NAME: "github-actions[bot]"
+      GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
+      HUSKY_SKIP_HOOKS: 1
+    steps:
+      - checkout
+      - run: npm set //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+      - node/install-packages
+      - run: npm run build
+      - run: npx semantic-release
+
+  build:
+    executor:
+      name: node/default
+      tag: '18.18.2'
+    steps:
+      - checkout
+      - run: npm set //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+      - node/install-packages
+      - run: npm run build
+
+  testing:
+    executor:
+      name: node/default
+      tag: '18.18.2'
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run test
+
+workflows:
+  build_test_release:
+    jobs:
+      - build:
+          context:
+            - NPM
+      - testing:
+          requires:
+            - build
+      - release:
+          requires:
+            - testing
+          filters:
+            branches:
+              only:
+                - master
+          context:
+            - NPM
