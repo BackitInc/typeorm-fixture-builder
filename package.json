@@ -1,7 +1,7 @@
 {
   "name": "@backitinc/typeorm-fixture-builder",
   "description": "Painless and type safe data fixtures for typeorm",
-  "version": "4.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Backit",
   "main": "dist/index.js",
@@ -114,7 +114,10 @@
       "@commitlint/config-conventional"
     ],
     "rules": {
-      "body-max-line-length": [0, "always"]
+      "body-max-line-length": [
+        0,
+        "always"
+      ]
     }
   }
 }
